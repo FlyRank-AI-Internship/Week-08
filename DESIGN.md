@@ -134,3 +134,16 @@ External dependencies such as geo providers and side effects sit behind service 
 ## Explicit Non-Goal
 
 This capstone will not build a drag-and-drop form builder or polished dashboard frontend. The widget UI and owner-facing UI will remain minimal because the project is graded primarily on backend correctness, resilience, security, and cross-origin behavior.
+
+
+### Data-model decisions
+
+Tenant ownership is stored explicitly on widgets and submissions.
+
+Every authenticated query will include tenant_id in its repository filter rather than fetching by resource ID alone. This prevents a user from another tenant from reading or modifying resources simply by knowing their IDs.
+
+Widget fields and display options are stored as JSONB because their shape varies between widget types, while ownership, status, timestamps, and submission relationships remain relational.
+
+Submission payloads are stored as JSONB only after validation against the widget configuration.
+
+An optional idempotency key is scoped to a widget so retried submissions can be detected safely.
