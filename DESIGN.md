@@ -34,9 +34,9 @@ Visitor submission
 -> payload protection
 -> rate limit
 -> spam check
--> geo enrichment
+-> geo enrichment with fallback
 -> store submission
--> non-critical side effect
+-> safe non-critical side effect
 
 ### Dashboard path
 
@@ -85,6 +85,7 @@ Authenticated owner
 - city
 - userAgent
 - isSpam
+- idempotencyKey
 - createdAt
 
 ## API Surface
@@ -116,6 +117,7 @@ OPTIONS /api/public/widgets/:id/submissions
 
 GET /api/dashboard/submissions
 GET /api/dashboard/stats
+GET /api/dashboard/widgets/:id/stats
 
 ## Layers
 
