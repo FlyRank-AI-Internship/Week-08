@@ -22,6 +22,10 @@ import {
   sendSubmissionNotification,
 } from "./sideEffectService.js";
 
+import {
+  publishSubmissionCreated,
+} from "./dashboardEventService.js";
+
 export async function handlePublicSubmission({
   widgetId,
   body,
@@ -93,6 +97,9 @@ export async function handlePublicSubmission({
       },
     };
   }
+
+  // Notify only the owning tenant after durable storage.
+  publishSubmissionCreated(submission);
 
   // Important:
   // side effect happens AFTER durable storage.

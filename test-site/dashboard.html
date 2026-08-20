@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Live Lead Dashboard</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 900px; margin: 40px auto; padding: 20px; background: #f8fafc; color: #172033; }
+    .status { padding: 10px 14px; border-radius: 8px; background: #fff3cd; margin-bottom: 16px; }
+    .connected { background: #d1fae5; }
+    table { width: 100%; border-collapse: collapse; background: white; }
+    th, td { padding: 12px; text-align: left; border-bottom: 1px solid #e5e7eb; }
+    th { background: #172033; color: white; }
+  </style>
+</head>
+<body>
+  <h1>Live Lead Dashboard</h1>
+  <p>Submit the widget on the customer page. The new lead appears here without refreshing.</p>
+  <div id="status" class="status">Connecting...</div>
+  <table>
+    <thead><tr><th>Time</th><th>Name</th><th>Email</th><th>Location</th></tr></thead>
+    <tbody id="leads"></tbody>
+  </table>
+  <script>
+    const apiUrl = window.location.origin;
+    const status = document.querySelector("#status");
+    const leads = document.querySelector("#leads");
+
+    function addLead(item) {
+      const row = document.createElement("tr");
+      const values = [
+        new Date(item.createdAt || item.created_at).toLocaleTimeString(),
+        item.payload?.name || "-",
+        item.payload?.email || "-",
+        [item.city, item.country].filter(Boolean).join(", ") || "Unknown",
+      ];
+      for (const value of values) {
+        const cell = document.createElement("td");
+        cell.textContent = value;
+        row.appendChild(cell);
+      }
+      leads.prepend(row);
+    }
+
+    async function start() {
+      const login = await fetch(`${apiUrl}/api/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: "owner-a@example.com", password: "Password123!" }),
+      });
+      if (!login.ok) throw new Error("Login failed");
+      const { token } = await login.json();
+
+      const existing = await fetch(`${apiUrl}/api/dashboard/submissions?limit=20`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const current = await existing.json();
+      current.items.reverse().forEach(addLead);
+
+      const response = await fetch(`${apiUrl}/api/dashboard/events`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!response.ok) throw new Error("Event stream failed");
+      status.textContent = "Connected - waiting for new submissions";
+      status.classList.add("connected");
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = "";
+      while (true) {
+        const result = await reader.read();
+        if (result.done) break;
+        buffer += decoder.decode(result.value, { stream: true });
+        const blocks = buffer.split("\n\n");
+        buffer = blocks.pop();
+        for (const block of blocks) {
+          if (!block.includes("event: submission.created")) continue;
+          const line = block.split("\n").find((entry) => entry.startsWith("data: "));
+          if (line) addLead(JSON.parse(line.slice(6)));
+        }
+      }
+    }
+
+    start().catch((error) => {
+      status.textContent = error.message;
+    });
+  </script>
+</body>
+</html>

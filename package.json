@@ -4,11 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node --env-file=.env ./node_modules/vitest/vitest.mjs run --sequence.concurrent=false",
     "start": "node --env-file=.env src/server.js",
     "dev": "nodemon --env-file=.env src/server.js",
     "migrate": "node --env-file=.env src/db/migrate.js",
-    "seed": "node --env-file=.env src/db/seed.js"
+    "seed": "node --env-file=.env src/db/seed.js",
+    "demo": "node --env-file=.env scripts/demo-rehearsal.js",
+    "test:watch": "vitest"
   },
   "keywords": [],
   "author": "",
@@ -25,6 +27,9 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "nodemon": "^3.1.14"
+    "jsdom": "^30.0.1",
+    "nodemon": "^3.1.14",
+    "supertest": "^7.2.2",
+    "vitest": "^4.1.10"
   }
 }

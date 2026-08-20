@@ -56,19 +56,19 @@ Per-widget embed snippet generation is implemented through the authenticated wid
 
 Public cached widget configuration endpoint:
 
-**Status:** Pending
+**Status:** Completed - `tests/widget-delivery.test.js` verifies the public config response.
 
 Versioned widget JavaScript bundle (`widget.v1.js`):
 
-**Status:** Pending
+**Status:** Completed - `tests/widget-delivery.test.js` verifies the immutable versioned bundle.
 
 Widget rendered successfully on a second-origin customer page:
 
-**Status:** Pending
+**Status:** Completed - the port 5500 test page and `tests/widget-render.test.js` prove rendering.
 
 Correct HTTP cache headers:
 
-**Status:** Pending
+**Status:** Completed - delivery tests assert immutable and 60-second cache policies.
 
 ---
 
@@ -222,19 +222,19 @@ No `Spam Bot` submission was stored.
 
 Provider A disabled/failing, Provider B enriches the submission.
 
-**Status:** Pending
+**Status:** Completed - `tests/geo-fallback.test.js` verifies provider B after provider A is disabled.
 
 ### All Geo Providers Down
 
 The submission must still be stored successfully without country/city data when both geo providers fail.
 
-**Status:** Pending
+**Status:** Completed - `tests/geo-fallback.test.js` verifies a null-geo degraded result.
 
 ### Safe Side Effect
 
 A forced confirmation-email/webhook failure must not prevent the submission from being stored or the API from returning success.
 
-**Status:** Pending
+**Status:** Completed - `npm run demo` forces failure after storage and requires HTTP 201 plus an increased dashboard count.
 
 ---
 
@@ -252,7 +252,7 @@ Required automated coverage still needs to include:
 * geo-provider fallback
 * successful widget rendering
 
-**Status:** Pending
+**Status:** Completed - 5 test files and all 12 tests passed after the documented Docker setup.
 
 ### README
 
@@ -264,7 +264,17 @@ README must include:
 * API documentation
 * honest limitations
 
-**Status:** In progress
+**Status:** Completed
+
+---
+
+## Optional Stretch Goal
+
+### Real-time Dashboard
+
+`GET /api/dashboard/events` exposes an authenticated SSE stream. A stored submission publishes `submission.created` only to listeners belonging to that submission's tenant. `tests/dashboard-events.test.js` proves authentication and tenant isolation; `/demo/dashboard` renders live leads without refreshing.
+
+**Status:** Completed
 
 ### Required Submission-Pack Files
 
@@ -276,4 +286,4 @@ The final repository must include:
 * `BUILDLOG.md`
 * `.env.example`
 
-**Status:** In progress
+**Status:** Completed

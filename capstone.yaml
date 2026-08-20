@@ -1,12 +1,13 @@
 name: flyrank-capstone-widget-platform
 
 run: npm start
-seed: pending
-test: pending
+seed: npm run migrate && npm run seed
+test: npm test
 base_url: http://localhost:3000
 
 endpoints:
   health: /health
   widgets: /api/widgets
-  submissions: /api/submissions
-  dashboard: /api/dashboard
+  widget_config: /api/public/widgets/:id/config
+  submissions: /api/public/widgets/:id/submissions
+  dashboard: /api/dashboard/stats
