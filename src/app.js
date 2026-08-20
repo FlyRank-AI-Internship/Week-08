@@ -33,7 +33,7 @@ app.get("/health", async (req, res) => {
 });
 
 // Versioned public asset
-app.get("/widget.v1.js", (req, res) => {
+app.get(["/widget.v1.js", "/widget.v2.js"], (req, res) => {
   res.setHeader(
     "Cache-Control",
     "public, max-age=31536000, immutable"

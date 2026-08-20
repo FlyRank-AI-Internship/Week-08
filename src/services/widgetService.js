@@ -55,5 +55,5 @@ export function generateEmbedSnippet(
   widgetId,
   baseUrl
 ) {
-  return `<script src="${baseUrl}/widget.v1.js?id=${widgetId}"></script>`;
+  return `<script src="${baseUrl}/widget.v2.js?id=${widgetId}"></script>`;
 }

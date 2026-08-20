@@ -10,7 +10,7 @@ Phase 4 - Complete. The repeatable seed, full automated suite, and two-run demo 
 
 ```text
 Widget owner -> JWT auth -> widget CRUD -----------> PostgreSQL
-External site -> widget.v1.js -> cached config -> rendered form
+External site -> widget.v2.js -> cached config -> rendered form
 Visitor -> CORS + validation + rate limit + honeypot
         -> geo provider A -> provider B -> store lead -> safe notification
 Owner -> JWT auth -> dashboard queries -----------> PostgreSQL
@@ -59,7 +59,7 @@ The demo command intentionally forces the notification to fail and verifies the 
 | `POST/GET` | `/api/widgets` | Bearer token | Create/list tenant widgets |
 | `GET/PATCH/DELETE` | `/api/widgets/:id` | Bearer token | Manage one tenant widget |
 | `GET` | `/api/widgets/:id/embed` | Bearer token | Generate embed snippet |
-| `GET` | `/widget.v1.js?id=:id` | Public | Versioned immutable widget bundle |
+| `GET` | `/widget.v2.js?id=:id` | Public | Versioned immutable widget bundle |
 | `GET` | `/api/public/widgets/:id/config` | Public/CORS | Short-cached widget config |
 | `OPTIONS/POST` | `/api/public/widgets/:id/submissions` | Public/CORS | Preflight and lead capture |
 | `GET` | `/api/dashboard/submissions` | Bearer token | Paginated tenant leads |

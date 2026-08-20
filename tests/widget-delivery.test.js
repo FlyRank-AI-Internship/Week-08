@@ -49,7 +49,7 @@ describe(
         const response =
           await request(app)
             .get(
-              `/widget.v1.js?id=${widget.id}`
+              `/widget.v2.js?id=${widget.id}`
             );
 
         expect(
